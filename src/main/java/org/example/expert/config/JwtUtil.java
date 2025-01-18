@@ -34,14 +34,16 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(Long userId, String email, UserRole userRole) {
+    public String createToken(Long userId, String email, UserRole userRole, String nickname) {
         Date date = new Date();
+        log.debug("Creating token with nickname: " + nickname);  // 추가된 로그
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(String.valueOf(userId))
                         .claim("email", email)
                         .claim("userRole", userRole)
+                        .claim("nickname", nickname)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
