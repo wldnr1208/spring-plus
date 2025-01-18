@@ -36,7 +36,6 @@ public class JwtUtil {
 
     public String createToken(Long userId, String email, UserRole userRole, String nickname) {
         Date date = new Date();
-        log.debug("Creating token with nickname: " + nickname);  // 추가된 로그
 
         return BEARER_PREFIX +
                 Jwts.builder()
