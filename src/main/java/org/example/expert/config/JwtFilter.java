@@ -32,6 +32,13 @@ public class JwtFilter implements Filter {
 
         String url = httpRequest.getRequestURI();
 
+        // Swagger UI 관련 경로 추가
+        if (isSwaggerUrl(url) || url.startsWith("/auth")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+
         if (url.startsWith("/auth")) {
             chain.doFilter(request, response);
             return;
@@ -85,6 +92,14 @@ public class JwtFilter implements Filter {
             log.error("Internal server error", e);
             httpResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+    // Swagger URL 체크 메서드 추가
+    private boolean isSwaggerUrl(String url) {
+        return url.contains("swagger-ui") ||
+            url.contains("api-docs") ||
+            url.contains("webjars") ||
+            url.contains("/swagger-resources") ||
+            url.equals("/");
     }
 
     @Override
