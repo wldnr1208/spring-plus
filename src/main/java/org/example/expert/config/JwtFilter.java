@@ -99,6 +99,7 @@ public class JwtFilter implements Filter {
             url.contains("api-docs") ||
             url.contains("webjars") ||
             url.contains("/swagger-resources") ||
+            url.contains("/h2-console") ||  // h2-console 추가
             url.equals("/");
     }
 
