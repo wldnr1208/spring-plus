@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -15,11 +17,11 @@ public abstract class Timestamped {
 
     @CreatedDate
     @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // 날짜만 표시
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // 날짜만 표시
     private LocalDateTime modifiedAt;
 }
