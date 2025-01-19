@@ -2,6 +2,7 @@ package org.example.expert.domain.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
+import org.example.expert.config.security.SecurityUser;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
@@ -47,7 +48,7 @@ public class TodoService {
         );
     }
 
-    public Page<TodoResponse> getTodos(TodoResponse.TodoSearchCondition condition) {
+    public Page<TodoResponse> getTodos(SecurityUser securityUser, TodoResponse.TodoSearchCondition condition) {
         Pageable pageable = PageRequest.of(condition.getPage() - 1, condition.getSize());
 
         Page<Todo> todos = todoRepository.findAllWithCondition(

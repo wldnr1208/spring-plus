@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.example.expert.config.security.SecurityUser;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
@@ -13,6 +15,7 @@ import org.example.expert.domain.todo.service.TodoService;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +34,7 @@ public class TodoController {
 
     @GetMapping("/todos")
     public ResponseEntity<Page<TodoResponse>> getTodos(
+        @AuthenticationPrincipal SecurityUser securityUser,
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(required = false) String weather,
@@ -38,6 +42,7 @@ public class TodoController {
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime modifiedAt
     ) {
         return ResponseEntity.ok(todoService.getTodos(
+            securityUser,
             new TodoResponse.TodoSearchCondition(page, size, weather, createdAt, modifiedAt)
         ));
     }
