@@ -47,7 +47,15 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil) throws Exception {
 		http
-			.csrf(AbstractHttpConfigurer::disable)
+			.csrf(csrf -> csrf
+				.ignoringRequestMatchers("/h2-console/**")  // H2 콘솔에 대해 CSRF 비활성화
+				.disable()
+			)
+			.headers(headers ->
+				headers.frameOptions(frameOptions ->
+					frameOptions.sameOrigin()  // H2 콘솔 iframe 허용
+				)
+			)
 			.sessionManagement(session ->
 				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
